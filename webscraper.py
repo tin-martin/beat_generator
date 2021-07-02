@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 import time
 import os,os.path
 options = Options()
-options.headless = False #change u frickr
+options.headless = True #
 
 options.add_experimental_option("prefs", {
   "download.default_directory": r"/Users/martintin/Desktop/beat_generator/MIDI",
@@ -17,16 +17,6 @@ driver = webdriver.Chrome(options=options, executable_path=r'/usr/local/bin/chro
 driver.set_window_size(1920, 1080)
 midi = []
 mp3 = []
-
-def main():
-	i = 4
-	driver.get(f'https://www.cprato.com/en/midi/all?page={i}')
-	driver.find_element_by_xpath('/html/body/div/div/a').click()
-	scrape_page()
-	while len([name for name in os.listdir('/Users/martintin/Desktop/beat_generator/MIDI')]) < 480:
-		i += 1
-		driver.get(f'https://www.cprato.com/en/midi/all?page={i}')
-		scrape_page()
 
 def scrape_page(): 
 	links = []
@@ -43,8 +33,6 @@ def scrape_page():
 		if links.count(i) != 1:
 			links.remove(i)
 
-
-
 	print(links)
 	for link in links:
 		print(link)
@@ -56,6 +44,16 @@ def scrape_page():
 		time.sleep(6)
 		print(len([name for name in os.listdir('/Users/martintin/Desktop/beat_generator/MIDI')]))
 
+
+def main():
+	i = 1
+	driver.get(f'https://www.cprato.com/en/midi/all?page={i}')
+	driver.find_element_by_xpath('/html/body/div/div/a').click()
+	scrape_page()
+	while len([name for name in os.listdir('/Users/martintin/Desktop/beat_generator/MIDI')]) < 480:
+		i += 1
+		driver.get(f'https://www.cprato.com/en/midi/all?page={i}')
+		scrape_page()
+
 main()
-print ("Headless Chrome Initialized")
 driver.quit()
